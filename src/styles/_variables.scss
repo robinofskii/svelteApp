@@ -1,0 +1,33 @@
+$gray-light: #f3f3f3;
+$gray-medium: #e3e3e3;
+$gray-dark: #3f3f3f;
+$gray-darker: #2f2f2f;
+$primary-color: #ff3e00;
+$secondary-color: #8acdea;
+$success-color: #90e39a;
+$warning-color: #f9c846;
+$danger-color: #f4867b;
+$info-color: #8acdea;
+
+$background-color: #f3f3f3;
+$link-color: $primary-color;
+$link-color-hover: $secondary-color;
+
+$text-color: #3f3f3f;
+$font-family-sans: 'Open Sans', sans-serif;
+$font-family-serif: 'Merriweather', serif;
+$font-weight: 400;
+
+$border-radius: 0.3rem;
+$padding: 1rem;
+$padding-large: 2rem;
+$padding-small: 0.5rem;
+$margin: 1rem;
+$margin-large: 2rem;
+$margin-small: 0.5rem;
+
+$box-shadow: 0 0.5rem 0.2rem rgba(0, 0, 0, 0.2);
+$box-shadow-inset: inset 0 0.1rem 0.1rem rgba(0, 0, 0, 0.2);
+
+$transition: all 0.5s;
+$transition-cubic: cubic-bezier(0.25, 0.8, 0.25, 1);
