@@ -23,7 +23,7 @@
 
 </script>
 
-<button on:mousedown={handleClick}>Clicks: {count}</button>
+<button on:mousedown={handleClick} on:keypress={handleClick}>Clicks: {count}</button>
 <p>{countState} <span on:click={resetCount} on:keypress={resetCount}>(resetCount)</span></p>
 
 <style lang="scss">
