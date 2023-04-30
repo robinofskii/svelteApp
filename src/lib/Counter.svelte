@@ -40,7 +40,7 @@
 	}
 	p {
 		span {
-			color: #ff3e00;
+			color: $primary-color;
 			cursor: pointer;
 		}
 	}
