@@ -1,62 +1,62 @@
 <script>
-  export let timeOut = 1500;
-  export let onConfirm = () => {
-    alert("Confirmed!")
-  };
-  export let btnText = "Logout";
-  export let clickText = "Are you sure?";
+	export let timeOut = 1500;
+	export let onConfirm = () => {
+		alert('Confirmed!');
+	};
+	export let btnText = 'Logout';
+	export let clickText = 'Are you sure?';
 
-  let clicked = false;
+	let clicked = false;
 
-  $: if (clicked) {
-    setTimeout(() => {
-      clicked = false;
-    }, timeOut);
-  }
+	$: if (clicked) {
+		setTimeout(() => {
+			clicked = false;
+		}, timeOut);
+	}
 
-  const handleConfirm = () => {
-    if (clicked) {
-      onConfirm();
-      return;
-    }
-    clicked = true;
-  }
+	const handleConfirm = () => {
+		if (clicked) {
+			onConfirm();
+			return;
+		}
+		clicked = true;
+	};
 </script>
 
 <span on:click={handleConfirm} on:keydown={handleConfirm} class:clicked>
-  {#if clicked}
-    <p>{clickText}</p>
-  {:else}
-    <p>{btnText}</p>
-  {/if}
+	{#if clicked}
+		<p>{clickText}</p>
+	{:else}
+		<p>{btnText}</p>
+	{/if}
 </span>
 
 <style lang="scss">
-  @use "src/styles/variables" as *;
-  span {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    
-    cursor: pointer;
-    padding: $padding;
-    border-radius: $border-radius;
-    border: none;
-    background-color: $gray-light;
+	@use 'src/styles/variables' as *;
+	span {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 1rem;
 
-    outline: solid 2px $primary-color;
+		cursor: pointer;
+		padding: $padding;
+		border-radius: $border-radius;
+		border: none;
+		background-color: $gray-light;
 
-    p {
-      color: $text-color;
-      font-weight: bold;
-      font-size: 1rem;
-      text-align: center;
-    }
+		outline: solid 2px $primary-color;
 
-    &.clicked {
-      background-color: $primary-color;
-      color: $gray-light;
-    }
-  }
+		p {
+			color: $text-color;
+			font-weight: bold;
+			font-size: 1rem;
+			text-align: center;
+		}
+
+		&.clicked {
+			background-color: $primary-color;
+			color: $gray-light;
+		}
+	}
 </style>
