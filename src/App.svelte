@@ -4,6 +4,7 @@
 	import ConfirmButton from './lib/ConfirmButton.svelte';
 	import Divider from './lib/Divider.svelte';
 
+  // JS of image
   const imagedims = {
     width: 500,
     height: 250
@@ -11,11 +12,24 @@
   const imageUrl = `https://picsum.photos/${imagedims.width}/${imagedims.height}`
   const name = 'World'
 
+  // JS of text
   const htmlText = 'Here is some example text with some <em>HTML</em> tags'
 
+  // JS of counter
   let maxCount = 1
   
+  // JS of button
   let btnSize = 'medium'
+
+  // JS of confirm button
+  const confirmButtonProps = {
+    timeOut: 5000,
+    onConfirm: () => {
+      alert("Impatient are we?")
+    },
+    btnText: "Do you want to wait 5 seconds?",
+    clickText: "Don't click me again!"
+  }
 </script>
 
 <section>
@@ -44,7 +58,7 @@
   </div>
   <Divider />
   <div class="logoutSection">
-    <ConfirmButton />
+    <ConfirmButton {...confirmButtonProps}/>
   </div>
 
 </section>

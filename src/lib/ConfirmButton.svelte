@@ -1,15 +1,22 @@
 <script>
+  export let timeOut = 1500;
+  export let onConfirm = () => {
+    alert("Confirmed!")
+  };
+  export let btnText = "Logout";
+  export let clickText = "Are you sure?";
+
   let clicked = false;
 
   $: if (clicked) {
     setTimeout(() => {
       clicked = false;
-    }, 1000);
+    }, timeOut);
   }
 
   const handleConfirm = () => {
     if (clicked) {
-      alert("Confirmed!")
+      onConfirm();
       return;
     }
     clicked = true;
@@ -18,11 +25,10 @@
 
 <span on:click={handleConfirm} on:keydown={handleConfirm} class:clicked>
   {#if clicked}
-    <p>Are you sure?</p>
+    <p>{clickText}</p>
   {:else}
-    <p>Logout</p>
+    <p>{btnText}</p>
   {/if}
-  
 </span>
 
 <style lang="scss">
@@ -45,6 +51,7 @@
       color: $text-color;
       font-weight: bold;
       font-size: 1rem;
+      text-align: center;
     }
 
     &.clicked {
