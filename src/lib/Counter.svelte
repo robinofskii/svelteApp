@@ -1,5 +1,4 @@
 <script>
-  import { longpress } from "../actions/longPress";
   export let initialCount = 0;
   export let maxCount = null;
 
