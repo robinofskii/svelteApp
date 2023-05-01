@@ -5,6 +5,8 @@
 	import Divider from './lib/Divider.svelte';
 
 	import MdThumbUp from 'svelte-icons/md/MdThumbUp.svelte';
+	import { v4 as uuid } from 'uuid';
+	import TodoList from './lib/TodoList.svelte';
 
 	// JS of image
 	const imagedims = {
@@ -32,10 +34,17 @@
 		btnText: 'Do you want to wait 5 seconds?',
 		clickText: "Don't click me again!",
 	};
+
+	// Js of todo list
+	let todos = [
+		{ id: uuid(), text: 'Learn Svelte', done: true },
+		{ id: uuid(), text: 'Learn Sapper', done: false },
+		{ id: uuid(), text: 'Learn SvelteKit', done: false },
+	];
 </script>
 
 <section>
-	<img src={imageUrl} alt="an example placeholder" />
+	<img src={imageUrl} alt="an example placeholder" height="250" width="500" />
 	<h1>Hello {name.toLocaleLowerCase()}</h1>
 	<p>{@html htmlText}</p>
 	<Divider />
@@ -67,6 +76,11 @@
 	<div class="logoutSection">
 		<ConfirmButton {...confirmButtonProps} />
 	</div>
+	<Divider />
+	<TodoList bind:todos />
+	<p>
+		{todos.length} todos ({todos.filter((todo) => todo.done).length} done)
+	</p>
 </section>
 
 <style lang="scss">

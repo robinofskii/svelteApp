@@ -11,7 +11,7 @@
 	console.log($$slots);
 </script>
 
-<button class={sizes[size]} class:shadow={hasShadow}>
+<button class={sizes[size]} class:shadow={hasShadow} {...$$restProps}>
 	{#if $$slots.leftContent}
 		<div class="left-content">
 			<slot name="leftContent" />
@@ -23,7 +23,6 @@
 <style lang="scss">
 	@use 'src/styles/variables' as *;
 	button {
-		margin: 1em;
 		background-color: $primary-color;
 		color: $text-color;
 		font-weight: bold;
