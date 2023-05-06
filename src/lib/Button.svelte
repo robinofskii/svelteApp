@@ -7,8 +7,6 @@
 		medium: 'size-md',
 		large: 'size-lg',
 	};
-
-	console.log($$slots);
 </script>
 
 <button class={sizes[size]} class:shadow={hasShadow} {...$$restProps}>

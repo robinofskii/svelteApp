@@ -1,11 +1,11 @@
-<script>
-	import Counter from './lib/Counter.svelte';
+<script lang="ts">
+	import { v4 as uuid } from 'uuid';
+	import MdThumbUp from 'svelte-icons/md/MdThumbUp.svelte';
+
 	import Button from './lib/Button.svelte';
 	import ConfirmButton from './lib/ConfirmButton.svelte';
+	import Counter from './lib/Counter.svelte';
 	import Divider from './lib/Divider.svelte';
-
-	import MdThumbUp from 'svelte-icons/md/MdThumbUp.svelte';
-	import { v4 as uuid } from 'uuid';
 	import TodoList from './lib/TodoList.svelte';
 
 	// JS of image
@@ -13,20 +13,25 @@
 		width: 500,
 		height: 250,
 	};
-	const imageUrl = `https://picsum.photos/${imagedims.width}/${imagedims.height}`;
-	const name = 'World';
+	const imageUrl: string = `https://picsum.photos/${imagedims.width}/${imagedims.height}`;
+	const name: string = 'World';
 
 	// JS of text
-	const htmlText = 'Here is some example text with some <em>HTML</em> tags';
+	const htmlText: string = 'Here is some example text with some <em>HTML</em> tags';
 
 	// JS of counter
-	let maxCount = 1;
+	let maxCount: number = 1;
 
 	// JS of button
-	let btnSize = 'medium';
+	let btnSize: string = 'medium';
 
 	// JS of confirm button
-	const confirmButtonProps = {
+	const confirmButtonProps: {
+		timeOut: number;
+		onConfirm: () => void;
+		btnText: string;
+		clickText: string;
+	} = {
 		timeOut: 5000,
 		onConfirm: () => {
 			alert('Impatient are we?');
@@ -36,11 +41,42 @@
 	};
 
 	// Js of todo list
-	let todos = [
+	let todos: {
+		id: string;
+		text: string;
+		done: boolean;
+	}[] = [
 		{ id: uuid(), text: 'Learn Svelte', done: true },
 		{ id: uuid(), text: 'Learn Sapper', done: false },
 		{ id: uuid(), text: 'Learn SvelteKit', done: false },
 	];
+
+	const handleAddTodo = (e: CustomEvent) => {
+		const newTodo = {
+			...e.detail,
+			id: uuid(),
+			done: false,
+		};
+		todos = [...todos, newTodo];
+	};
+
+	const handleClearTodos = (e: CustomEvent) => {
+		todos = [];
+	};
+
+	const handleDoneTodo = (e: CustomEvent) => {
+		const { id } = e.detail;
+
+		todos = todos.map((todo) => {
+			if (todo.id === id) {
+				return {
+					...todo,
+					done: !todo.done,
+				};
+			}
+			return todo;
+		});
+	};
 </script>
 
 <section>
@@ -77,7 +113,12 @@
 		<ConfirmButton {...confirmButtonProps} />
 	</div>
 	<Divider />
-	<TodoList bind:todos />
+	<TodoList
+		{todos}
+		on:addTodo={handleAddTodo}
+		on:clearTodos={handleClearTodos}
+		on:doneTodo={handleDoneTodo}
+	/>
 	<p>
 		{todos.length} todos ({todos.filter((todo) => todo.done).length} done)
 	</p>

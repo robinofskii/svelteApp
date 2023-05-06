@@ -1,12 +1,12 @@
-<script>
-	export let timeOut = 1500;
-	export let onConfirm = () => {
+<script lang="ts">
+	export let timeOut: number = 1500;
+	export let onConfirm: () => void = () => {
 		alert('Confirmed!');
 	};
-	export let btnText = 'Logout';
-	export let clickText = 'Are you sure?';
+	export let btnText: string = 'Logout';
+	export let clickText: string = 'Are you sure?';
 
-	let clicked = false;
+	let clicked: boolean = false;
 
 	$: if (clicked) {
 		setTimeout(() => {

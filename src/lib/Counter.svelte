@@ -1,22 +1,22 @@
-<script>
-	export let initialCount = 0;
-	export let maxCount = null;
+<script lang="ts">
+	export let initialCount: number = 0;
+	export let maxCount: number | null = null;
 
-	let count = initialCount;
+	let count: number = initialCount;
 	$: countState = `You have clicked ${count} times`;
 
-	const isMaxCountReached = () => {
+	const isMaxCountReached = (): boolean => {
 		return maxCount !== null && count >= maxCount;
 	};
 
-	const handleClick = () => {
+	const handleClick = (): void => {
 		if (isMaxCountReached()) {
 			count = 0;
 		}
 		count += 1;
 	};
 
-	const resetCount = () => {
+	const resetCount = (): void => {
 		count = 0;
 	};
 </script>

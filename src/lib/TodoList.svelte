@@ -1,23 +1,37 @@
-<script>
-	import { v4 as uuid } from 'uuid';
+<svelte:options immutable={true} />
+
+<script lang="ts">
+	import { createEventDispatcher } from 'svelte';
 	import Button from './Button.svelte';
 
-	export let todos = [];
+	export let todos: { text: string; id: string; done: boolean }[] = [];
 
-	let inputValue = '';
+	const dispatch = createEventDispatcher();
 
-	const handleSubmit = (e) => {
+	let inputValue: string = '';
+
+	const handleDone = (id: string) => {
+		dispatch('doneTodo', {
+			id,
+		});
+	};
+
+	const handleSubmit = (e: Event) => {
 		e.preventDefault();
 
 		if (!inputValue) return;
 
-		const newTodo = { id: uuid(), text: inputValue, done: false };
-		todos = [...todos, newTodo];
+		dispatch('addTodo', {
+			text: inputValue,
+		});
+
 		inputValue = '';
 	};
 
-	const clearTodos = () => {
-		todos = [];
+	const handleClear = (e: Event) => {
+		e.preventDefault();
+
+		dispatch('clearTodos');
 	};
 </script>
 
@@ -29,18 +43,17 @@
 	</form>
 	<ul>
 		{#each todos as { id, text, done }, index (id)}
-			{@const number = index + 1}
 			<li class="todo">
 				{#if done}
-					<s>{number}. {text}</s>
+					<s>{text}</s>
 				{:else}
-					<p>{number}. {text}</p>
+					<p>{text}</p>
 				{/if}
-				<input type="checkbox" bind:checked={done} />
+				<input type="checkbox" checked={done} on:change={() => handleDone(id)} />
 			</li>
 		{/each}
 	</ul>
-	<span class="clearButton" on:click={clearTodos} on:keydown={clearTodos}> Clear todos </span>
+	<span class="clearButton" on:click={handleClear} on:keydown={handleClear}> Clear todos </span>
 </section>
 
 <style lang="scss">
