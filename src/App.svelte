@@ -60,6 +60,12 @@
 		todos = [...todos, newTodo];
 	};
 
+	const handleDeleteTodo = (e: CustomEvent) => {
+		const { id } = e.detail;
+
+		todos = todos.filter((todo) => todo.id !== id);
+	};
+
 	const handleClearTodos = (e: CustomEvent) => {
 		todos = [];
 	};
@@ -118,6 +124,7 @@
 		on:addTodo={handleAddTodo}
 		on:clearTodos={handleClearTodos}
 		on:doneTodo={handleDoneTodo}
+		on:deleteTodo={handleDeleteTodo}
 	/>
 	<p>
 		{todos.length} todos ({todos.filter((todo) => todo.done).length} done)

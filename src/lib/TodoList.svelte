@@ -5,13 +5,23 @@
 	import Button from './Button.svelte';
 
 	export let todos: { text: string; id: string; done: boolean }[] = [];
+	export const focusInput = () => {
+		input.focus();
+	};
 
 	const dispatch = createEventDispatcher();
 
 	let inputValue: string = '';
+	let input: HTMLInputElement;
 
 	const handleDone = (id: string) => {
 		dispatch('doneTodo', {
+			id,
+		});
+	};
+
+	const handleDelete = (id: string) => {
+		dispatch('deleteTodo', {
 			id,
 		});
 	};
@@ -38,7 +48,7 @@
 <section class="todo-container">
 	<h2>Todo List</h2>
 	<form class="add-todo-form" on:submit={handleSubmit}>
-		<input type="text" placeholder="Add a todo" bind:value={inputValue} />
+		<input type="text" placeholder="Add a todo" bind:this={input} bind:value={inputValue} />
 		<Button size="small" type="submit">Add</Button>
 	</form>
 	<ul>
@@ -49,7 +59,16 @@
 				{:else}
 					<p>{text}</p>
 				{/if}
-				<input type="checkbox" checked={done} on:change={() => handleDone(id)} />
+				<div class="todo-actions">
+					<input type="checkbox" checked={done} on:change={() => handleDone(id)} />
+					<button
+						class="deleteButton"
+						on:click={() => handleDelete(id)}
+						on:keydown={() => handleDelete(id)}
+					>
+						Delete
+					</button>
+				</div>
 			</li>
 		{/each}
 	</ul>
@@ -94,12 +113,30 @@
 			justify-content: space-between;
 			gap: 1rem;
 
-			input {
-				width: 1.5rem;
-				height: 1.5rem;
-				accent-color: $primary-color;
-				&:active {
-					transform: scale(1.2);
+			.todo-actions {
+				display: flex;
+				gap: 1rem;
+				justify-items: flex-end;
+				align-items: center;
+
+				input {
+					width: 1.5rem;
+					height: 1.5rem;
+					accent-color: $primary-color;
+					&:active {
+						transform: scale(1.2);
+					}
+				}
+
+				button {
+					border: none;
+					background-color: transparent;
+					cursor: pointer;
+					color: $primary-color;
+
+					&:hover {
+						text-decoration: underline;
+					}
 				}
 			}
 		}
