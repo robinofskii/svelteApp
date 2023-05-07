@@ -1,10 +1,26 @@
 <svelte:options immutable={true} />
 
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount, afterUpdate } from 'svelte';
 	import Button from './Button.svelte';
 
+	afterUpdate(() => {
+		if (!todoListDiv) return;
+		if (autoScroll) todoListDiv.scrollTo(0, todoListDiv.scrollHeight);
+		autoScroll = false;
+	});
+
 	export let todos: { text: string; id: string; done: boolean }[] = [];
+	let prevTodos: { text: string; id: string; done: boolean }[] = todos;
+
+	$: {
+		// We need to check if there are more todos than before, if so, we need to scroll to the bottom
+		// This needs to be done in a reactive statement, because we need to check before we set prevTodos
+		// equal to the newTodos
+		if (todos.length >= prevTodos.length) autoScroll = true;
+		prevTodos = todos;
+	}
+
 	export const focusInput = () => {
 		input.focus();
 	};
@@ -12,7 +28,9 @@
 	const dispatch = createEventDispatcher();
 
 	let inputValue: string = '';
+	let autoScroll = false;
 	let input: HTMLInputElement;
+	let todoListDiv: HTMLDivElement;
 
 	const handleDone = (id: string) => {
 		dispatch('doneTodo', {
@@ -51,27 +69,29 @@
 		<input type="text" placeholder="Add a todo" bind:this={input} bind:value={inputValue} />
 		<Button size="small" type="submit">Add</Button>
 	</form>
-	<ul>
-		{#each todos as { id, text, done }, index (id)}
-			<li class="todo">
-				{#if done}
-					<s>{text}</s>
-				{:else}
-					<p>{text}</p>
-				{/if}
-				<div class="todo-actions">
-					<input type="checkbox" checked={done} on:change={() => handleDone(id)} />
-					<button
-						class="deleteButton"
-						on:click={() => handleDelete(id)}
-						on:keydown={() => handleDelete(id)}
-					>
-						Delete
-					</button>
-				</div>
-			</li>
-		{/each}
-	</ul>
+	<div class="todo-list" bind:this={todoListDiv}>
+		<ul>
+			{#each todos as { id, text, done }, index (id)}
+				<li class="todo">
+					{#if done}
+						<s>{text}</s>
+					{:else}
+						<p>{text}</p>
+					{/if}
+					<div class="todo-actions">
+						<input type="checkbox" checked={done} on:change={() => handleDone(id)} />
+						<button
+							class="deleteButton"
+							on:click={() => handleDelete(id)}
+							on:keydown={() => handleDelete(id)}
+						>
+							Delete
+						</button>
+					</div>
+				</li>
+			{/each}
+		</ul>
+	</div>
 	<span class="clearButton" on:click={handleClear} on:keydown={handleClear}> Clear todos </span>
 </section>
 
@@ -107,39 +127,45 @@
 				}
 			}
 		}
-		.todo {
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			gap: 1rem;
+		.todo-list {
+			max-height: 200px;
+			overflow-y: auto;
 
-			.todo-actions {
+			.todo {
 				display: flex;
-				gap: 1rem;
-				justify-items: flex-end;
 				align-items: center;
+				justify-content: space-between;
+				gap: 1rem;
 
-				input {
-					width: 1.5rem;
-					height: 1.5rem;
-					accent-color: $primary-color;
-					&:active {
-						transform: scale(1.2);
+				.todo-actions {
+					display: flex;
+					gap: 1rem;
+					justify-items: flex-end;
+					align-items: center;
+
+					input {
+						width: 1.5rem;
+						height: 1.5rem;
+						accent-color: $primary-color;
+						&:active {
+							transform: scale(1.2);
+						}
 					}
-				}
 
-				button {
-					border: none;
-					background-color: transparent;
-					cursor: pointer;
-					color: $primary-color;
+					button {
+						border: none;
+						background-color: transparent;
+						cursor: pointer;
+						color: $primary-color;
 
-					&:hover {
-						text-decoration: underline;
+						&:hover {
+							text-decoration: underline;
+						}
 					}
 				}
 			}
 		}
+
 		.clearButton {
 			align-self: flex-end;
 			cursor: pointer;
