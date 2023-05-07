@@ -8,6 +8,7 @@
 	import Divider from './lib/Divider.svelte';
 	import TodoList from './lib/TodoList.svelte';
 	import type { Todo } from './models/Todo';
+	import { onMount, tick } from 'svelte';
 
 	// JS of image
 	const imagedims = {
@@ -42,49 +43,117 @@
 	};
 
 	// Js of todo list
-	let todos = null;
+	const API_URL: string = 'https://jsonplaceholder.typicode.com/todos';
 
-	const handleAddTodo = (e: CustomEvent) => {
-		// e.preventDefault();
+	onMount(async () => {
+		loadTodos();
+	});
+
+	let todoList = null;
+	let todos: Todo[] = [];
+	let completedTodos = null;
+	let error = null;
+	let isLoading = false;
+	let isAdding = false;
+	let disabledItems = [];
+
+	$: {
+		if (todos && todos.length > 0) {
+			completedTodos = todos.filter((todo: Todo) => todo.completed).length;
+		}
+	}
+
+	const loadTodos = async () => {
+		isLoading = true;
+		await fetch(`${API_URL}?_limit=10`).then(async (response) => {
+			if (!response.ok) {
+				error = 'Could not fetch the data for the todos';
+			}
+			todos = await response.json();
+		});
+		isLoading = false;
+	};
+
+	const handleAddTodo = async (e: CustomEvent) => {
+		e.preventDefault();
 		const newTodo = {
 			...e.detail,
 			id: uuid(),
 			done: false,
 		};
-		todos = [...todos, newTodo];
+		isAdding = true;
+		await fetch(API_URL, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json;charset=utf-8',
+			},
+			body: JSON.stringify(newTodo),
+		}).then(async (response) => {
+			if (!response.ok) {
+				error = 'Could not add the todo';
+			}
+			const todo = await response.json();
+			todos = [...todos, { ...todo, id: uuid() }];
+		});
+		isAdding = false;
+
+		await tick();
+
+		todoList.clearInput();
+		todoList.focusInput();
 	};
 
-	const handleDeleteTodo = (e: CustomEvent) => {
+	const handleDeleteTodo = async (e: CustomEvent) => {
 		const { id } = e.detail as Todo;
 
-		todos = todos.filter((todo: Todo) => todo.id !== id);
+		if (disabledItems.includes(id)) {
+			return;
+		}
+		disabledItems = [...disabledItems, id];
+
+		await fetch(`${API_URL}/${id}`, {
+			method: 'DELETE',
+		}).then(async (response) => {
+			if (!response.ok) {
+				alert('Could not delete the todo');
+			}
+
+			todos = todos.filter((todo: Todo) => todo.id !== id);
+		});
+		disabledItems = disabledItems.filter((item) => item !== id);
 	};
 
 	const handleClearTodos = (e: CustomEvent) => {
 		todos = [];
 	};
 
-	const handleDoneTodo = (e: CustomEvent) => {
-		const { id } = e.detail;
+	const handleDoneTodo = async (e: CustomEvent) => {
+		const { id, completed } = e.detail;
 
-		todos = todos.map((todo: Todo) => {
-			if (todo.id === id) {
-				return {
-					...todo,
-					completed: !todo.completed,
-				};
-			}
-			return todo;
-		});
-	};
+		if (disabledItems.includes(id)) {
+			return;
+		}
+		disabledItems = [...disabledItems, id];
 
-	const loadTodos = () => {
-		return fetch('https://jsonplaceholder.typicode.com/todos?_limit=10').then((response) => {
+		await fetch(`${API_URL}/${id}`, {
+			method: 'PATCH',
+			headers: {
+				'Content-Type': 'application/json;charset=utf-8',
+			},
+			body: JSON.stringify({ completed }),
+		}).then(async (response) => {
 			if (!response.ok) {
-				throw new Error('Network response was not ok');
+				alert('Could not update the todo');
 			}
-			return response.json();
+			const updatedTodo = await response.json();
+			todos = todos.map((todo: Todo) => {
+				if (todo.id === id) {
+					return updatedTodo;
+				}
+				return todo;
+			});
 		});
+		disabledItems = disabledItems.filter((item) => item !== id);
 	};
 </script>
 
@@ -122,19 +191,23 @@
 		<ConfirmButton {...confirmButtonProps} />
 	</div>
 	<Divider />
-	{#await loadTodos() then todos}
-		<TodoList
-			{todos}
-			on:addTodo={handleAddTodo}
-			on:clearTodos={handleClearTodos}
-			on:doneTodo={handleDoneTodo}
-			on:deleteTodo={handleDeleteTodo}
-		/>
-
+	<TodoList
+		{todos}
+		{error}
+		{isLoading}
+		disableButton={isAdding}
+		{disabledItems}
+		on:addTodo={handleAddTodo}
+		on:clearTodos={handleClearTodos}
+		on:doneTodo={handleDoneTodo}
+		on:deleteTodo={handleDeleteTodo}
+		bind:this={todoList}
+	/>
+	{#if todos.length > 0}
 		<p>
-			{todos.length} todos ({todos.filter((todo) => todo.done).length} done)
+			{todos.length} todos {completedTodos} done
 		</p>
-	{/await}
+	{/if}
 </section>
 
 <style lang="scss">

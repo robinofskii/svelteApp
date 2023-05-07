@@ -33,6 +33,15 @@
 		justify-content: center;
 		align-items: center;
 
+		&:disabled {
+			cursor: not-allowed;
+			background-color: $gray-medium;
+
+			&:active {
+				color: inherit;
+			}
+		}
+
 		.left-content {
 			max-width: 2rem;
 			display: flex;

@@ -6,9 +6,18 @@
 	import Button from './Button.svelte';
 	import { type Todo } from '../models/Todo';
 
-	export let todos: Todo[] = [];
+	export let todos: Todo[] = null;
+	export let error: string = null;
+	export let isLoading: boolean = false;
+	export let disableButton: boolean = false;
+	export let disabledItems: number[] = [];
+
 	export const focusInput = () => {
 		input.focus();
+	};
+
+	export const clearInput = () => {
+		input.value = '';
 	};
 
 	afterUpdate(() => {
@@ -29,15 +38,16 @@
 		// We need to check if there are more todos than before, if so, we need to scroll to the bottom
 		// This needs to be done in a reactive statement, because we need to check before we set prevTodos
 		// equal to the newTodos
-		if (todos.length >= prevTodos.length) autoScroll = true;
+		if (todos && prevTodos && todos.length >= prevTodos.length) {
+			autoScroll = true;
+		}
 		prevTodos = todos;
 	}
 
-	console.log(todos);
-
-	const handleDone = (id: number) => {
+	const handleDone = (id: number, currCompleted: boolean) => {
 		dispatch('doneTodo', {
 			id,
+			completed: !currCompleted,
 		});
 	};
 
@@ -50,12 +60,12 @@
 	const handleSubmit = (e: Event) => {
 		e.preventDefault();
 
-		if (!inputValue) return;
+		if (inputValue === '') return;
 
 		const isNotCancelled = dispatch(
 			'addTodo',
 			{
-				text: inputValue,
+				title: inputValue,
 			},
 			{ cancelable: true }
 		);
@@ -73,37 +83,55 @@
 <section class="todo-container">
 	<h2>Todo List</h2>
 	<form class="add-todo-form" on:submit={handleSubmit}>
-		<div class="add-todo-input">
-			<input type="text" placeholder="Add a todo" bind:this={input} bind:value={inputValue} />
-			<Button size="small" type="submit">Add</Button>
+		<div class="add-todo-input" class:disabled={disableButton}>
+			<input
+				type="text"
+				placeholder="Add a todo"
+				bind:this={input}
+				bind:value={inputValue}
+				disabled={disableButton || !todos}
+			/>
+			<Button size="small" type="submit" disabled={inputValue === '' || disableButton}>Add</Button>
 		</div>
 	</form>
-	<div class="todo-list" bind:this={todoListDiv}>
-		<ul>
-			{#if todos.length === 0}
-				<li class="todo">
-					<p>No todos yet</p>
-				</li>{/if}
-			{#each todos as { id, title, completed }, index (id)}
-				<li class="todo">
-					<div class="todo-header">
-						<input type="checkbox" checked={completed} on:change={() => handleDone(id)} />
-						<p class:completed>{title}</p>
-					</div>
+	{#if isLoading}
+		<p>Loading...</p>
+	{:else if error}
+		<p>{error}</p>
+	{:else if todos}
+		<div class="todo-list" bind:this={todoListDiv}>
+			<ul>
+				{#if todos.length === 0}
+					<li class="todo">
+						<p>No todos yet</p>
+					</li>{/if}
+				{#each todos as { id, title, completed }}
+					<li class="todo">
+						<div class="todo-header">
+							<input
+								type="checkbox"
+								checked={completed}
+								on:change={() => handleDone(id, completed)}
+								disabled={disabledItems.includes(id)}
+							/>
+							<p class:completed>{title}</p>
+						</div>
 
-					{#if completed}
-						<button
-							class="deleteButton"
-							on:click={() => handleDelete(id)}
-							on:keydown={() => handleDelete(id)}
-						>
-							<MdDelete />
-						</button>
-					{/if}
-				</li>
-			{/each}
-		</ul>
-	</div>
+						{#if completed}
+							<button
+								class="deleteButton"
+								on:click={() => handleDelete(id)}
+								on:keydown={() => handleDelete(id)}
+								disabled={disabledItems.includes(id)}
+							>
+								<MdDelete />
+							</button>
+						{/if}
+					</li>
+				{/each}
+			</ul>
+		</div>
+	{/if}
 	<span class="clearButton" on:click={handleClear} on:keydown={handleClear}>Clear todos</span>
 </section>
 
@@ -138,15 +166,21 @@
 				border: none;
 				outline: 1px solid $gray-medium;
 				outline-offset: 0;
+
+				&:focus-within {
+					outline: 1px solid $primary-color;
+				}
+				&.disabled {
+					outline: 1px solid $gray-dark;
+					background-color: $gray-light;
+				}
+
 				input {
 					-webkit-appearance: none;
 					appearance: none;
 					border: none;
 					padding: 1rem;
 					outline: none;
-				}
-				&:focus-within {
-					outline: 1px solid $primary-color;
 				}
 			}
 		}
@@ -198,6 +232,10 @@
 
 					&:hover {
 						color: $primary-color;
+					}
+					&:disabled {
+						color: $gray-dark;
+						cursor: not-allowed;
 					}
 				}
 			}
