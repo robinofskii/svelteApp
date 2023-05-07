@@ -52,6 +52,7 @@
 	];
 
 	const handleAddTodo = (e: CustomEvent) => {
+		// e.preventDefault();
 		const newTodo = {
 			...e.detail,
 			id: uuid(),

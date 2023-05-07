@@ -40,7 +40,7 @@
 			align-items: center;
 		}
 		&.size-sm {
-			padding: $padding $padding;
+			padding: $padding calc($padding * 1.5);
 			font-size: 0.8rem;
 			gap: 0.5rem;
 

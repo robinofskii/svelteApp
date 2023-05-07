@@ -2,7 +2,13 @@
 
 <script lang="ts">
 	import { createEventDispatcher, onMount, afterUpdate } from 'svelte';
+	import MdDelete from 'svelte-icons/md/MdDelete.svelte';
 	import Button from './Button.svelte';
+
+	export let todos: { text: string; id: string; done: boolean }[] = [];
+	export const focusInput = () => {
+		input.focus();
+	};
 
 	afterUpdate(() => {
 		if (!todoListDiv) return;
@@ -10,7 +16,12 @@
 		autoScroll = false;
 	});
 
-	export let todos: { text: string; id: string; done: boolean }[] = [];
+	const dispatch = createEventDispatcher();
+
+	let inputValue: string = '';
+	let autoScroll = false;
+	let input: HTMLInputElement;
+	let todoListDiv: HTMLDivElement;
 	let prevTodos: { text: string; id: string; done: boolean }[] = todos;
 
 	$: {
@@ -20,17 +31,6 @@
 		if (todos.length >= prevTodos.length) autoScroll = true;
 		prevTodos = todos;
 	}
-
-	export const focusInput = () => {
-		input.focus();
-	};
-
-	const dispatch = createEventDispatcher();
-
-	let inputValue: string = '';
-	let autoScroll = false;
-	let input: HTMLInputElement;
-	let todoListDiv: HTMLDivElement;
 
 	const handleDone = (id: string) => {
 		dispatch('doneTodo', {
@@ -49,11 +49,15 @@
 
 		if (!inputValue) return;
 
-		dispatch('addTodo', {
-			text: inputValue,
-		});
+		const isNotCancelled = dispatch(
+			'addTodo',
+			{
+				text: inputValue,
+			},
+			{ cancelable: true }
+		);
 
-		inputValue = '';
+		if (isNotCancelled) inputValue = '';
 	};
 
 	const handleClear = (e: Event) => {
@@ -66,33 +70,38 @@
 <section class="todo-container">
 	<h2>Todo List</h2>
 	<form class="add-todo-form" on:submit={handleSubmit}>
-		<input type="text" placeholder="Add a todo" bind:this={input} bind:value={inputValue} />
-		<Button size="small" type="submit">Add</Button>
+		<div class="add-todo-input">
+			<input type="text" placeholder="Add a todo" bind:this={input} bind:value={inputValue} />
+			<Button size="small" type="submit">Add</Button>
+		</div>
 	</form>
 	<div class="todo-list" bind:this={todoListDiv}>
 		<ul>
+			{#if todos.length === 0}
+				<li class="todo">
+					<p>No todos yet</p>
+				</li>{/if}
 			{#each todos as { id, text, done }, index (id)}
 				<li class="todo">
-					{#if done}
-						<s>{text}</s>
-					{:else}
-						<p>{text}</p>
-					{/if}
-					<div class="todo-actions">
+					<div class="todo-header">
 						<input type="checkbox" checked={done} on:change={() => handleDone(id)} />
+						<p class:done>{text}</p>
+					</div>
+
+					{#if done}
 						<button
 							class="deleteButton"
 							on:click={() => handleDelete(id)}
 							on:keydown={() => handleDelete(id)}
 						>
-							Delete
+							<MdDelete />
 						</button>
-					</div>
+					{/if}
 				</li>
 			{/each}
 		</ul>
 	</div>
-	<span class="clearButton" on:click={handleClear} on:keydown={handleClear}> Clear todos </span>
+	<span class="clearButton" on:click={handleClear} on:keydown={handleClear}>Clear todos</span>
 </section>
 
 <style lang="scss">
@@ -110,20 +119,29 @@
 		h2 {
 			margin-bottom: 1rem;
 		}
+
 		.add-todo-form {
 			display: flex;
 			gap: 1rem;
 			margin-bottom: 1rem;
 
-			input {
-				padding: 0.5rem;
-				border-radius: 0.5rem;
+			.add-todo-input {
+				display: flex;
+				flex: 1;
+
+				border-radius: $border-radius;
 				border: none;
 				outline: 1px solid $gray-medium;
 				outline-offset: 0;
-				font-size: large;
-				&:focus {
-					outline: 2px solid $primary-color;
+				input {
+					-webkit-appearance: none;
+					appearance: none;
+					border: none;
+					padding: 1rem;
+					outline: none;
+				}
+				&:focus-within {
+					outline: 1px solid $primary-color;
 				}
 			}
 		}
@@ -137,7 +155,13 @@
 				justify-content: space-between;
 				gap: 1rem;
 
-				.todo-actions {
+				p {
+					&.done {
+						text-decoration: line-through;
+					}
+				}
+
+				.todo-header {
 					display: flex;
 					gap: 1rem;
 					justify-items: flex-end;
@@ -151,16 +175,17 @@
 							transform: scale(1.2);
 						}
 					}
+				}
 
-					button {
-						border: none;
-						background-color: transparent;
-						cursor: pointer;
+				.deleteButton {
+					max-width: 2rem;
+					border: none;
+					background-color: transparent;
+					cursor: pointer;
+					color: $danger-color;
+
+					&:hover {
 						color: $primary-color;
-
-						&:hover {
-							text-decoration: underline;
-						}
 					}
 				}
 			}
