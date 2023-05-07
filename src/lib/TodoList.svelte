@@ -115,6 +115,7 @@
 		border-radius: $border-radius;
 		background-color: #fff;
 		box-shadow: $box-shadow;
+		width: 500px;
 
 		h2 {
 			margin-bottom: 1rem;
@@ -128,6 +129,7 @@
 			.add-todo-input {
 				display: flex;
 				flex: 1;
+				justify-content: space-between;
 
 				border-radius: $border-radius;
 				border: none;
@@ -155,11 +157,10 @@
 				justify-content: space-between;
 				gap: 1rem;
 
-				p {
-					&.done {
-						text-decoration: line-through;
-					}
-				}
+				background-color: $gray-light;
+				border-radius: $border-radius;
+				padding: 0.5rem 1rem;
+				margin: $margin / 2 0;
 
 				.todo-header {
 					display: flex;
@@ -171,8 +172,16 @@
 						width: 1.5rem;
 						height: 1.5rem;
 						accent-color: $primary-color;
+						cursor: pointer;
+						flex-shrink: 0;
 						&:active {
 							transform: scale(1.2);
+						}
+					}
+
+					p {
+						&.done {
+							text-decoration: line-through;
 						}
 					}
 				}
