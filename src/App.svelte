@@ -7,6 +7,7 @@
 	import Counter from './lib/Counter.svelte';
 	import Divider from './lib/Divider.svelte';
 	import TodoList from './lib/TodoList.svelte';
+	import type { Todo } from './models/Todo';
 
 	// JS of image
 	const imagedims = {
@@ -32,24 +33,16 @@
 		btnText: string;
 		clickText: string;
 	} = {
-		timeOut: 5000,
+		timeOut: 2000,
 		onConfirm: () => {
 			alert('Impatient are we?');
 		},
-		btnText: 'Do you want to wait 5 seconds?',
+		btnText: 'Do you want to wait 2 seconds?',
 		clickText: "Don't click me again!",
 	};
 
 	// Js of todo list
-	let todos: {
-		id: string;
-		text: string;
-		done: boolean;
-	}[] = [
-		{ id: uuid(), text: 'Learn Svelte', done: true },
-		{ id: uuid(), text: 'Learn Sapper', done: false },
-		{ id: uuid(), text: 'Learn SvelteKit', done: false },
-	];
+	let todos = null;
 
 	const handleAddTodo = (e: CustomEvent) => {
 		// e.preventDefault();
@@ -62,9 +55,9 @@
 	};
 
 	const handleDeleteTodo = (e: CustomEvent) => {
-		const { id } = e.detail;
+		const { id } = e.detail as Todo;
 
-		todos = todos.filter((todo) => todo.id !== id);
+		todos = todos.filter((todo: Todo) => todo.id !== id);
 	};
 
 	const handleClearTodos = (e: CustomEvent) => {
@@ -74,14 +67,23 @@
 	const handleDoneTodo = (e: CustomEvent) => {
 		const { id } = e.detail;
 
-		todos = todos.map((todo) => {
+		todos = todos.map((todo: Todo) => {
 			if (todo.id === id) {
 				return {
 					...todo,
-					done: !todo.done,
+					completed: !todo.completed,
 				};
 			}
 			return todo;
+		});
+	};
+
+	const loadTodos = () => {
+		return fetch('https://jsonplaceholder.typicode.com/todos?_limit=10').then((response) => {
+			if (!response.ok) {
+				throw new Error('Network response was not ok');
+			}
+			return response.json();
 		});
 	};
 </script>
@@ -120,16 +122,19 @@
 		<ConfirmButton {...confirmButtonProps} />
 	</div>
 	<Divider />
-	<TodoList
-		{todos}
-		on:addTodo={handleAddTodo}
-		on:clearTodos={handleClearTodos}
-		on:doneTodo={handleDoneTodo}
-		on:deleteTodo={handleDeleteTodo}
-	/>
-	<p>
-		{todos.length} todos ({todos.filter((todo) => todo.done).length} done)
-	</p>
+	{#await loadTodos() then todos}
+		<TodoList
+			{todos}
+			on:addTodo={handleAddTodo}
+			on:clearTodos={handleClearTodos}
+			on:doneTodo={handleDoneTodo}
+			on:deleteTodo={handleDeleteTodo}
+		/>
+
+		<p>
+			{todos.length} todos ({todos.filter((todo) => todo.done).length} done)
+		</p>
+	{/await}
 </section>
 
 <style lang="scss">

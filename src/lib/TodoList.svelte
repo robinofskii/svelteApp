@@ -1,11 +1,12 @@
 <svelte:options immutable={true} />
 
 <script lang="ts">
-	import { createEventDispatcher, onMount, afterUpdate } from 'svelte';
+	import { createEventDispatcher, afterUpdate } from 'svelte';
 	import MdDelete from 'svelte-icons/md/MdDelete.svelte';
 	import Button from './Button.svelte';
+	import { type Todo } from '../models/Todo';
 
-	export let todos: { text: string; id: string; done: boolean }[] = [];
+	export let todos: Todo[] = [];
 	export const focusInput = () => {
 		input.focus();
 	};
@@ -22,7 +23,7 @@
 	let autoScroll = false;
 	let input: HTMLInputElement;
 	let todoListDiv: HTMLDivElement;
-	let prevTodos: { text: string; id: string; done: boolean }[] = todos;
+	let prevTodos: Todo[] = todos;
 
 	$: {
 		// We need to check if there are more todos than before, if so, we need to scroll to the bottom
@@ -32,13 +33,15 @@
 		prevTodos = todos;
 	}
 
-	const handleDone = (id: string) => {
+	console.log(todos);
+
+	const handleDone = (id: number) => {
 		dispatch('doneTodo', {
 			id,
 		});
 	};
 
-	const handleDelete = (id: string) => {
+	const handleDelete = (id: number) => {
 		dispatch('deleteTodo', {
 			id,
 		});
@@ -81,14 +84,14 @@
 				<li class="todo">
 					<p>No todos yet</p>
 				</li>{/if}
-			{#each todos as { id, text, done }, index (id)}
+			{#each todos as { id, title, completed }, index (id)}
 				<li class="todo">
 					<div class="todo-header">
-						<input type="checkbox" checked={done} on:change={() => handleDone(id)} />
-						<p class:done>{text}</p>
+						<input type="checkbox" checked={completed} on:change={() => handleDone(id)} />
+						<p class:completed>{title}</p>
 					</div>
 
-					{#if done}
+					{#if completed}
 						<button
 							class="deleteButton"
 							on:click={() => handleDelete(id)}
@@ -160,7 +163,7 @@
 				background-color: $gray-light;
 				border-radius: $border-radius;
 				padding: 0.5rem 1rem;
-				margin: $margin / 2 0;
+				margin: calc($margin / 2) 0;
 
 				.todo-header {
 					display: flex;
@@ -180,7 +183,7 @@
 					}
 
 					p {
-						&.done {
+						&.completed {
 							text-decoration: line-through;
 						}
 					}
