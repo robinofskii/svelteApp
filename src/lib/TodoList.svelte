@@ -38,7 +38,7 @@
 		// We need to check if there are more todos than before, if so, we need to scroll to the bottom
 		// This needs to be done in a reactive statement, because we need to check before we set prevTodos
 		// equal to the newTodos
-		if (todos && prevTodos && todos.length >= prevTodos.length) {
+		if (todos && prevTodos && todos.length > prevTodos.length) {
 			autoScroll = true;
 		}
 		prevTodos = todos;
@@ -181,6 +181,7 @@
 					border: none;
 					padding: 1rem;
 					outline: none;
+					flex-grow: 1;
 				}
 			}
 		}
@@ -248,6 +249,42 @@
 
 			&:hover {
 				text-decoration: underline;
+			}
+		}
+
+		@media (prefers-color-scheme: dark) {
+			background-color: $gray-dark;
+
+			h2 {
+				color: $gray-light;
+			}
+
+			.add-todo-form {
+				.add-todo-input {
+					outline: 1px solid $gray-dark;
+					background-color: #fff;
+				}
+			}
+
+			.todo-list {
+				.todo {
+					background-color: $gray-dark;
+					color: $gray-light;
+
+					.todo-header {
+						input {
+							accent-color: $gray-light;
+						}
+					}
+
+					.deleteButton {
+						color: $danger-color;
+
+						&:hover {
+							color: $primary-color;
+						}
+					}
+				}
 			}
 		}
 	}
