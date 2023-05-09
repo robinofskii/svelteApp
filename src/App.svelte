@@ -222,15 +222,8 @@
 		padding: 2rem;
 		border-radius: $border-radius;
 	}
-
-	h1 {
-		color: $text-color;
-	}
 	img {
 		border-radius: $border-radius;
-	}
-	p {
-		color: $text-color;
 	}
 	.maxInput {
 		display: flex;
