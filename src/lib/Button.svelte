@@ -1,6 +1,12 @@
 <script>
+	import longpress from './actions/longpress';
+
 	export let size = 'medium';
 	export let hasShadow = false;
+	export let onLongpress = () => {
+		return;
+	};
+	export let longpressDuration = 500;
 
 	const sizes = {
 		small: 'size-sm',
@@ -9,7 +15,13 @@
 	};
 </script>
 
-<button class={sizes[size]} class:shadow={hasShadow} {...$$restProps}>
+<button
+	use:longpress={{ duration: longpressDuration }}
+	on:longpress={onLongpress}
+	class={sizes[size]}
+	class:shadow={hasShadow}
+	{...$$restProps}
+>
 	{#if $$slots.leftContent}
 		<div class="left-content">
 			<slot name="leftContent" />

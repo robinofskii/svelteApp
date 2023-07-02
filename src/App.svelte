@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { v4 as uuid } from 'uuid';
 	import MdThumbUp from 'svelte-icons/md/MdThumbUp.svelte';
+	import MdAccessTime from 'svelte-icons/md/MdAccessTime.svelte';
 
+	import longpress from './lib/actions/longpress';
 	import Button from './lib/Button.svelte';
 	import ConfirmButton from './lib/ConfirmButton.svelte';
 	import Counter from './lib/Counter.svelte';
@@ -176,6 +178,19 @@
 				<MdThumbUp />
 			</span>
 			Other text
+		</Button>
+		<Button
+			size={btnSize}
+			hasShadow
+			onLongpress={() => {
+				alert('Longpress!');
+			}}
+			longpressDuration={1000}
+		>
+			<span slot="leftContent">
+				<MdAccessTime />
+			</span>
+			Longpress me
 		</Button>
 	</div>
 	<div class="buttonSizeSwitch">
