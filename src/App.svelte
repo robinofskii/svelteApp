@@ -3,7 +3,8 @@
 	import MdThumbUp from 'svelte-icons/md/MdThumbUp.svelte';
 	import MdAccessTime from 'svelte-icons/md/MdAccessTime.svelte';
 
-	import longpress from './lib/actions/longpress';
+	import tippy from './lib/actions/tippy';
+
 	import Button from './lib/Button.svelte';
 	import ConfirmButton from './lib/ConfirmButton.svelte';
 	import Counter from './lib/Counter.svelte';
@@ -160,8 +161,21 @@
 </script>
 
 <section>
-	<img src={imageUrl} alt="an example placeholder" height="250" width="500" />
-	<h1>Hello {name.toLocaleLowerCase()}</h1>
+	<img
+		class="headerImage"
+		src={imageUrl}
+		alt="an example placeholder"
+		height="250"
+		width="500"
+		use:tippy={{
+			content: 'A wonderful image from the internet',
+			placement: 'bottom',
+			theme: 'light',
+		}}
+	/>
+	<h1 use:tippy={{ content: 'Hello to you too', placement: 'right', theme: 'light' }}>
+		Hello {name.toLocaleLowerCase()}
+	</h1>
 	<p>{@html htmlText}</p>
 	<Divider />
 	<div class="maxInput">

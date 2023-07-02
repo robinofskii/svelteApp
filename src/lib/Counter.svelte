@@ -1,4 +1,6 @@
 <script lang="ts">
+	import tippy from './actions/tippy';
+
 	export let initialCount: number = 0;
 	export let maxCount: number | null = null;
 
@@ -21,7 +23,12 @@
 	};
 </script>
 
-<button on:mousedown={handleClick} on:keypress={handleClick}>Clicks: {count}</button>
+<button
+	on:mousedown={handleClick}
+	on:keypress={handleClick}
+	use:tippy={{ content: `Button will count to: ${maxCount}`, theme: 'light', hideOnClick: false }}
+	>Clicks: {count}</button
+>
 <p>{countState} <span on:click={resetCount} on:keypress={resetCount}>(resetCount)</span></p>
 
 <style lang="scss">
