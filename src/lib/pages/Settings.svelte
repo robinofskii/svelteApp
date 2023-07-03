@@ -1,5 +1,9 @@
 <script lang="ts">
 	import settings from '../stores/settings';
+
+	$: {
+		localStorage.setItem('settings', JSON.stringify($settings));
+	}
 </script>
 
 <div class="settingsContainer">
