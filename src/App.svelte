@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+
 	import Home from './lib/pages/Home.svelte';
 	import Settings from './lib/pages/Settings.svelte';
+	import Location from './lib/pages/Location.svelte';
+
 	import Head from './lib/Head.svelte';
 
 	let selectedPage = Home;
@@ -9,10 +12,15 @@
 	const onRouteChange = () => {
 		const route = window.location.hash.slice(1);
 
-		if (route === '/settings') {
-			selectedPage = Settings;
-		} else {
-			selectedPage = Home;
+		switch (route) {
+			case '/settings':
+				selectedPage = Settings;
+				break;
+			case '/location':
+				selectedPage = Location;
+				break;
+			default:
+				selectedPage = Home;
 		}
 	};
 
@@ -27,6 +35,9 @@
 	<ul>
 		<li>
 			<a href="#/">Home</a>
+		</li>
+		<li>
+			<a href="#/location">Location</a>
 		</li>
 		<li>
 			<a href="#/settings">Settings</a>
