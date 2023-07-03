@@ -1,19 +1,5 @@
 <script lang="ts">
-	import { onDestroy } from 'svelte';
-
 	import settings from '../stores/settings';
-
-	const { subscribe, update } = settings;
-
-	let darkMode: boolean;
-	let fontSize: number;
-
-	const unsubscribe = subscribe((settings) => {
-		darkMode = settings.darkMode;
-		fontSize = settings.fontSize;
-	});
-
-	onDestroy(unsubscribe);
 </script>
 
 <div class="settingsContainer">
@@ -25,8 +11,10 @@
 			<input
 				type="checkbox"
 				id="darkModeInput"
-				bind:checked={darkMode}
-				on:change={() => update((prevSettings) => ({ ...prevSettings, darkMode }))}
+				bind:checked={$settings.darkMode}
+				on:click={() => {
+					$settings.darkMode = !$settings.darkMode;
+				}}
 			/>
 		</div>
 		<div class="inputContainer">
@@ -34,8 +22,10 @@
 			<input
 				type="number"
 				id="fontSizeInput"
-				bind:value={fontSize}
-				on:change={() => update((prevSettings) => ({ ...prevSettings, fontSize }))}
+				bind:value={$settings.fontSize}
+				on:change={() => {
+					$settings.fontSize = Number($settings.fontSize);
+				}}
 			/>
 		</div>
 	</div>
