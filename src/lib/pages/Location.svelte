@@ -1,4 +1,7 @@
 <script lang="ts">
+	import FaRegCopy from 'svelte-icons/fa/FaRegCopy.svelte';
+
+	import Button from '../Button.svelte';
 	import location from '../stores/location';
 </script>
 
@@ -20,7 +23,6 @@
 				<span>Longitude:</span>
 				<span>{$location.data.longitude}</span>
 			</div>
-
 			<a
 				href="https://www.google.com/maps/search/?api=1&query={$location.data.latitude},{$location
 					.data.longitude}"
@@ -28,6 +30,24 @@
 			>
 				Open in Google Maps
 			</a>
+			<Button
+				type="button"
+				size="small"
+				on:click={() => {
+					if (navigator.clipboard) {
+						navigator.clipboard.writeText(
+							`${$location.data.latitude}, ${$location.data.longitude}`
+						);
+					} else {
+						console.error('Clipboard API not supported');
+					}
+				}}
+			>
+				<span slot="leftContent">
+					<FaRegCopy />
+				</span>
+				Copy coordinates
+			</Button>
 		</div>
 	{/if}
 </div>
