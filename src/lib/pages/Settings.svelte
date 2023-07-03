@@ -1,1 +1,81 @@
-<h1>Settings</h1>
+<script lang="ts">
+	import { onDestroy } from 'svelte';
+
+	import settings from '../stores/settings';
+
+	const { subscribe, update } = settings;
+
+	let darkMode: boolean;
+	let fontSize: number;
+
+	const unsubscribe = subscribe((settings) => {
+		darkMode = settings.darkMode;
+		fontSize = settings.fontSize;
+	});
+
+	onDestroy(unsubscribe);
+</script>
+
+<div class="settingsContainer">
+	<h1>Settings</h1>
+
+	<div class="settingsForm">
+		<div class="inputContainer">
+			<label for="darkModeInput"> Dark mode </label>
+			<input
+				type="checkbox"
+				id="darkModeInput"
+				bind:checked={darkMode}
+				on:change={() => update((prevSettings) => ({ ...prevSettings, darkMode }))}
+			/>
+		</div>
+		<div class="inputContainer">
+			<label for="fontSizeInput"> Font size </label>
+			<input
+				type="number"
+				id="fontSizeInput"
+				bind:value={fontSize}
+				on:change={() => update((prevSettings) => ({ ...prevSettings, fontSize }))}
+			/>
+		</div>
+	</div>
+</div>
+
+<style lang="scss">
+	@use 'src/styles/variables' as *;
+
+	.settingsContainer {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+
+		h1 {
+			margin: 1rem;
+		}
+
+		.settingsForm {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 1rem;
+
+			.inputContainer {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+
+				label {
+					margin-bottom: 0.5rem;
+				}
+
+				input {
+					margin-bottom: 1rem;
+				}
+
+				#fontSizeInput {
+					width: 3rem;
+				}
+			}
+		}
+	}
+</style>
