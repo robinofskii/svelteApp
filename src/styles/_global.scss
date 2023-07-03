@@ -11,8 +11,8 @@
 
 @media (prefers-color-scheme: dark) {
 	:root {
-		background-color: #333;
-		color: #f3f3f3;
+		background-color: variables.$gray-dark;
+		color: variables.$gray-light;
 	}
 }
 
