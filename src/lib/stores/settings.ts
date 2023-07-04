@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 
-export interface SettingsStoreType {
+interface SettingsStoreType {
 	darkMode: boolean;
 	language: 'en' | 'nl' | 'ar';
 	fontSize: number;
