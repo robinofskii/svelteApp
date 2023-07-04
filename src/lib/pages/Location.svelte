@@ -2,30 +2,30 @@
 	import FaRegCopy from 'svelte-icons/fa/FaRegCopy.svelte';
 
 	import Button from '../Button.svelte';
-	import location from '../stores/location';
+	import { locationStore } from '../stores/location';
 </script>
 
 <div class="locationContainer">
 	<h1>Location</h1>
 
-	{#if $location.error}
-		<p class="locationError">{$location.error}</p>
-	{:else if $location.loading}
+	{#if $locationStore.error}
+		<p class="locationError">{$locationStore.error}</p>
+	{:else if $locationStore.loading}
 		<p class="locationLoading">Loading...</p>
 	{:else}
 		<div class="locationCoordinates">
 			<!-- Show the location information in a grid -->
 			<div>
 				<span>Latitude:</span>
-				<span>{$location.data.latitude}</span>
+				<span>{$locationStore.data.latitude}</span>
 			</div>
 			<div>
 				<span>Longitude:</span>
-				<span>{$location.data.longitude}</span>
+				<span>{$locationStore.data.longitude}</span>
 			</div>
 			<a
-				href="https://www.google.com/maps/search/?api=1&query={$location.data.latitude},{$location
-					.data.longitude}"
+				href="https://www.google.com/maps/search/?api=1&query={$locationStore.data
+					.latitude},{$locationStore.data.longitude}"
 				target="_blank"
 			>
 				Open in Google Maps
@@ -36,7 +36,7 @@
 				on:click={() => {
 					if (navigator.clipboard) {
 						navigator.clipboard.writeText(
-							`${$location.data.latitude}, ${$location.data.longitude}`
+							`${$locationStore.data.latitude}, ${$locationStore.data.longitude}`
 						);
 					} else {
 						console.error('Clipboard API not supported');

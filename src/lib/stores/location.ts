@@ -1,10 +1,9 @@
 import { readable } from 'svelte/store';
 
+import type { Coordinates } from '../../models/Location';
+
 type LocationType = {
-	data: {
-		latitude: number;
-		longitude: number;
-	};
+	data: Coordinates;
 	error?: string;
 	loading: boolean;
 };
@@ -17,7 +16,7 @@ const initialLocation: LocationType = {
 	loading: true,
 };
 
-const location = readable<LocationType>(initialLocation, (set) => {
+export const locationStore = readable<LocationType>(initialLocation, (set) => {
 	let locationWatcher: number | undefined;
 
 	if (navigator.geolocation && navigator.geolocation.watchPosition) {
@@ -54,5 +53,3 @@ const location = readable<LocationType>(initialLocation, (set) => {
 		}
 	};
 });
-
-export default location;
