@@ -1,8 +1,8 @@
 <script lang="ts">
-	import settings from '../stores/settings';
+	import { settingsStore } from '../stores/settings';
 
 	$: {
-		localStorage.setItem('settings', JSON.stringify($settings));
+		localStorage.setItem('settings', JSON.stringify($settingsStore));
 	}
 </script>
 
@@ -15,10 +15,8 @@
 			<input
 				type="checkbox"
 				id="darkModeInput"
-				bind:checked={$settings.darkMode}
-				on:click={() => {
-					$settings.darkMode = !$settings.darkMode;
-				}}
+				bind:checked={$settingsStore.darkMode}
+				on:click={() => settingsStore.toggleDarkmode()}
 			/>
 		</div>
 		<div class="inputContainer">
@@ -26,11 +24,22 @@
 			<input
 				type="number"
 				id="fontSizeInput"
-				bind:value={$settings.fontSize}
-				on:change={() => {
-					$settings.fontSize = Number($settings.fontSize);
+				bind:value={$settingsStore.fontSize}
+				on:blur={() => {
+					$settingsStore.fontSize = Number($settingsStore.fontSize);
 				}}
 			/>
+		</div>
+		<div class="inputContainer">
+			<label for="resetButton"> Reset Settings </label>
+			<button
+				id="resetButton"
+				on:click={() => {
+					settingsStore.reset();
+				}}
+			>
+				Reset
+			</button>
 		</div>
 	</div>
 </div>

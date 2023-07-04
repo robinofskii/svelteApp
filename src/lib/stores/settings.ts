@@ -1,18 +1,50 @@
 import { writable } from 'svelte/store';
 
-const settings = writable(
-	{
-		darkMode: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches,
-		language: 'en',
-		fontSize: 16,
-	},
-	(set) => {
-		const savedSettings = localStorage.getItem('settings');
-		if (savedSettings) {
-			set(JSON.parse(savedSettings));
-		}
-		return () => {};
-	}
-);
+interface SettingsStoreType {
+	darkMode: boolean;
+	language: string;
+	fontSize: number;
+}
 
-export default settings;
+const defaultSettings: SettingsStoreType = {
+	darkMode: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches,
+	language: 'en',
+	fontSize: 16,
+};
+
+/**
+ * Fetches the settings from local storage or returns the default settings if none are found.
+ * @returns {SettingsStoreType} The settings object.
+ */
+const fetchSettings = (): SettingsStoreType => {
+	const settings = localStorage.getItem('settings');
+	if (settings) {
+		return JSON.parse(settings);
+	}
+	return { ...defaultSettings };
+};
+
+/**
+ * Creates a Svelte store for the settings.
+ * @returns {Object} An object containing the Svelte store methods.
+ */
+const createSettingsStore = () => {
+	const { subscribe, set, update } = writable(fetchSettings());
+
+	const reset = () => {
+		set({ ...defaultSettings });
+	};
+
+	const toggleDarkmode = () =>
+		update((settings) => ({ ...settings, darkMode: !settings.darkMode }));
+
+	return {
+		subscribe,
+		set,
+		update,
+		reset,
+		toggleDarkmode,
+	};
+};
+
+export const settingsStore = createSettingsStore();

@@ -1,9 +1,9 @@
 <script>
-	import settings from './stores/settings';
+	import { settingsStore } from './stores/settings';
 </script>
 
 <svelte:head>
-	{#if $settings.darkMode}
+	{#if $settingsStore.darkMode}
 		<style lang="scss">
 			@use '../styles/variables';
 
