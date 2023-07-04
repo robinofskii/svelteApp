@@ -2,7 +2,7 @@ import { writable } from 'svelte/store';
 
 interface SettingsStoreType {
 	darkMode: boolean;
-	language: string;
+	language: 'en' | 'nl';
 	fontSize: number;
 }
 
