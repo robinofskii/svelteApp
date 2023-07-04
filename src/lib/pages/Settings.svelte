@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { settingsStore } from '../stores/settings';
+	import { languageStore } from '../stores/language';
 
 	$: {
 		localStorage.setItem('settings', JSON.stringify($settingsStore));
@@ -29,6 +30,17 @@
 					$settingsStore.fontSize = Number($settingsStore.fontSize);
 				}}
 			/>
+		</div>
+		<div class="inputContainer">
+			<label for="languageSelect"> Language </label>
+			<select id="languageSelect" bind:value={$settingsStore.language}>
+				<option value="en">English</option>
+				<option value="nl">Dutch</option>
+				<option value="ar">Arabic</option>
+			</select>
+			<p class="languageDisplay">
+				Selected language: {$settingsStore.language} in {$languageStore.textDirection}
+			</p>
 		</div>
 		<div class="inputContainer">
 			<label for="resetButton"> Reset Settings </label>
@@ -77,6 +89,14 @@
 
 				#fontSizeInput {
 					width: 3rem;
+				}
+
+				#resetButton {
+					width: 5rem;
+				}
+
+				.languageDisplay {
+					margin-top: 0.5rem;
 				}
 			}
 		}

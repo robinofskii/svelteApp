@@ -1,8 +1,8 @@
 import { writable } from 'svelte/store';
 
-interface SettingsStoreType {
+export interface SettingsStoreType {
 	darkMode: boolean;
-	language: 'en' | 'nl';
+	language: 'en' | 'nl' | 'ar';
 	fontSize: number;
 }
 
@@ -26,7 +26,7 @@ const fetchSettings = (): SettingsStoreType => {
 
 /**
  * Creates a Svelte store for the settings.
- * @returns {Object} An object containing the Svelte store methods.
+ * @returns An object containing the Svelte store methods.
  */
 const createSettingsStore = () => {
 	const { subscribe, set, update } = writable(fetchSettings());
