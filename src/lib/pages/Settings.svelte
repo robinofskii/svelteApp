@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { settingsStore } from '../stores/settings';
 	import { languageStore } from '../stores/language';
+	import AnimatedIcon from '../AnimatedIcon.svelte';
 
 	$: {
 		localStorage.setItem('settings', JSON.stringify($settingsStore));
@@ -54,6 +55,7 @@
 			</button>
 		</div>
 	</div>
+	<AnimatedIcon />
 </div>
 
 <style lang="scss">
