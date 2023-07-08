@@ -53,8 +53,6 @@
 </div>
 
 <style lang="scss">
-	@use 'src/styles/variables' as *;
-
 	.locationContainer {
 		display: flex;
 		flex-direction: column;
@@ -65,11 +63,11 @@
 		}
 
 		.locationError {
-			color: $danger-color;
+			color: var(--color-danger);
 		}
 
 		.locationLoading {
-			color: $info-color;
+			color: var(--color-info);
 		}
 
 		.locationCoordinates {

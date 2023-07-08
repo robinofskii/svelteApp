@@ -249,10 +249,10 @@
 		align-items: center;
 		gap: 2rem;
 		padding: 2rem;
-		border-radius: $border-radius;
+		border-radius: var(--border-radius);
 	}
 	img {
-		border-radius: $border-radius;
+		border-radius: var(--border-radius);
 	}
 	.maxInput {
 		display: flex;
@@ -261,17 +261,17 @@
 		gap: 1rem;
 
 		input {
-			padding: $padding;
-			border-radius: $border-radius;
+			padding: var(--padding);
+			border-radius: var(--border-radius);
 			border: none;
-			background-color: $gray-light;
-			color: $text-color;
+			background-color: var(--gray-light);
+			color: var(--text-color);
 			font-weight: bold;
 			font-size: 1rem;
 			width: 10rem;
 			text-align: center;
 			&:focus {
-				outline: solid 2px $primary-color;
+				outline: solid 2px var(--primary-color);
 			}
 		}
 	}
@@ -281,17 +281,17 @@
 		align-items: center;
 		gap: 1rem;
 		select {
-			padding: $padding;
-			border-radius: $border-radius;
+			padding: var(--padding);
+			border-radius: var(--border-radius);
 			border: none;
-			background-color: $gray-light;
-			color: $text-color;
+			background-color: var(--gray-light);
+			color: var(--text-color);
 			font-weight: bold;
 			font-size: 1rem;
 			width: 10rem;
 			text-align: center;
 			&:focus {
-				outline: solid 2px $primary-color;
+				outline: solid 2px var(--primary-color);
 			}
 		}
 	}

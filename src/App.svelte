@@ -49,9 +49,8 @@
 </div>
 
 <style lang="scss">
-	@use 'src/styles/variables' as *;
 	nav {
-		background-color: $primary-color;
+		background-color: var(--primary-color);
 		padding: 1rem;
 		border-bottom: solid 2px #fff;
 

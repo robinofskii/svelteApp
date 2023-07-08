@@ -31,13 +31,12 @@
 </button>
 
 <style lang="scss">
-	@use 'src/styles/variables' as *;
 	button {
-		background-color: $primary-color;
-		color: $text-color;
+		background-color: var(--primary-color);
+		color: var(--text-color);
 		font-weight: bold;
-		padding: $padding $padding-large;
-		border-radius: $border-radius;
+		padding: var(--padding) var(--padding-large);
+		border-radius: var(--border-radius);
 		border: none;
 		cursor: pointer;
 
@@ -47,7 +46,7 @@
 
 		&:disabled {
 			cursor: not-allowed;
-			background-color: $gray-medium;
+			background-color: var(--gray-medium);
 
 			&:active {
 				color: inherit;
@@ -61,7 +60,7 @@
 			align-items: center;
 		}
 		&.size-sm {
-			padding: $padding calc($padding * 1.5);
+			padding: var(--padding) calc(var(--padding) * 1.5);
 			font-size: 0.8rem;
 			gap: 0.5rem;
 
@@ -70,7 +69,7 @@
 			}
 		}
 		&.size-md {
-			padding: $padding $padding-large;
+			padding: var(--padding) var(--padding-large);
 			font-size: 1rem;
 			gap: 1rem;
 
@@ -79,7 +78,7 @@
 			}
 		}
 		&.size-lg {
-			padding: $padding-large $padding-large * 2;
+			padding: var(--padding-large) calc(var(--padding-large) * 2);
 			font-size: 1.2rem;
 			gap: 1.5rem;
 
@@ -88,20 +87,15 @@
 			}
 		}
 		&.shadow {
-			box-shadow: $box-shadow;
+			box-shadow: var(--box-shadow);
 		}
 		&:active {
-			color: $gray-light;
-			transition: background-color 0.3s $transition-cubic;
-			background-color: scale-color(
-				$color: $primary-color,
-				$saturation: 0%,
-				$lightness: -10%,
-				$alpha: 0%
-			);
+			color: var(--gray-light);
+			transition: background-color 0.3s var(--transition-cubic);
+			background-color: var(--primary-color);
 
 			&.shadow {
-				box-shadow: $box-shadow-inset;
+				box-shadow: var(--box-shadow-inset);
 			}
 		}
 	}

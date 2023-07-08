@@ -32,7 +32,6 @@
 </span>
 
 <style lang="scss">
-	@use 'src/styles/variables' as *;
 	span {
 		display: flex;
 		justify-content: center;
@@ -40,23 +39,23 @@
 		gap: 1rem;
 
 		cursor: pointer;
-		padding: $padding;
-		border-radius: $border-radius;
+		padding: var(--padding);
+		border-radius: var(--border-radius);
 		border: none;
-		background-color: $gray-light;
+		background-color: var(--gray-light);
 
-		outline: solid 2px $primary-color;
+		outline: solid 2px var(--primary-color);
 
 		p {
-			color: $text-color;
+			color: var(--text-color);
 			font-weight: bold;
 			font-size: 1rem;
 			text-align: center;
 		}
 
 		&.clicked {
-			background-color: $primary-color;
-			color: $gray-light;
+			background-color: var(--primary-color);
+			color: var(--gray-light);
 		}
 	}
 </style>

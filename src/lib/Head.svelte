@@ -8,8 +8,8 @@
 			@use '../styles/variables';
 
 			:root {
-				background-color: variables.$gray-dark;
-				color: variables.$gray-light;
+				background-color: var(--gray-dark);
+				color: var(--gray-light);
 			}
 		</style>
 	{:else}
@@ -17,8 +17,8 @@
 			@use '../styles/variables';
 
 			:root {
-				background-color: variables.$gray-light;
-				color: variables.$gray-dark;
+				background-color: var(--gray-light);
+				color: var(--gray-dark);
 			}
 		</style>
 	{/if}

@@ -136,16 +136,14 @@
 </section>
 
 <style lang="scss">
-	@use 'src/styles/variables' as *;
-
 	.todo-container {
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
 		padding: 2rem;
-		border-radius: $border-radius;
+		border-radius: var(--border-radius);
 		background-color: #fff;
-		box-shadow: $box-shadow;
+		box-shadow: var(--box-shadow);
 		width: 500px;
 
 		h2 {
@@ -162,17 +160,17 @@
 				flex: 1;
 				justify-content: space-between;
 
-				border-radius: $border-radius;
+				border-radius: var(--border-radius);
 				border: none;
-				outline: 1px solid $gray-medium;
+				outline: 1px solid var(--gray-medium);
 				outline-offset: 0;
 
 				&:focus-within {
-					outline: 1px solid $primary-color;
+					outline: 1px solid var(--primary-color);
 				}
 				&.disabled {
-					outline: 1px solid $gray-dark;
-					background-color: $gray-light;
+					outline: 1px solid var(--gray-dark);
+					background-color: var(--gray-light);
 				}
 
 				input {
@@ -195,10 +193,10 @@
 				justify-content: space-between;
 				gap: 1rem;
 
-				background-color: $gray-light;
-				border-radius: $border-radius;
+				background-color: var(--gray-light);
+				border-radius: var(--border-radius);
 				padding: 0.5rem 1rem;
-				margin: calc($margin / 2) 0;
+				margin: calc(var(--margin) / 2) 0;
 
 				.todo-header {
 					display: flex;
@@ -209,7 +207,7 @@
 					input {
 						width: 1.5rem;
 						height: 1.5rem;
-						accent-color: $primary-color;
+						accent-color: var(--primary-color);
 						cursor: pointer;
 						flex-shrink: 0;
 						&:active {
@@ -229,13 +227,13 @@
 					border: none;
 					background-color: transparent;
 					cursor: pointer;
-					color: $danger-color;
+					color: var(--danger-color);
 
 					&:hover {
-						color: $primary-color;
+						color: var(--primary-color);
 					}
 					&:disabled {
-						color: $gray-dark;
+						color: var(--gray-dark);
 						cursor: not-allowed;
 					}
 				}
@@ -245,7 +243,7 @@
 		.clearButton {
 			align-self: flex-end;
 			cursor: pointer;
-			color: $primary-color;
+			color: var(--primary-color);
 
 			&:hover {
 				text-decoration: underline;
@@ -253,35 +251,35 @@
 		}
 
 		@media (prefers-color-scheme: dark) {
-			background-color: $gray-dark;
+			background-color: var(--gray-dark);
 
 			h2 {
-				color: $gray-light;
+				color: var(--gray-light);
 			}
 
 			.add-todo-form {
 				.add-todo-input {
-					outline: 1px solid $gray-dark;
+					outline: 1px solid var(--gray-dark);
 					background-color: #fff;
 				}
 			}
 
 			.todo-list {
 				.todo {
-					background-color: $gray-dark;
-					color: $gray-light;
+					background-color: var(--gray-dark);
+					color: var(--gray-light);
 
 					.todo-header {
 						input {
-							accent-color: $gray-light;
+							accent-color: var(--gray-light);
 						}
 					}
 
 					.deleteButton {
-						color: $danger-color;
+						color: var(--danger-color);
 
 						&:hover {
-							color: $primary-color;
+							color: var(--primary-color);
 						}
 					}
 				}

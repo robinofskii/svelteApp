@@ -32,13 +32,11 @@
 <p>{countState} <span on:click={resetCount} on:keypress={resetCount}>(resetCount)</span></p>
 
 <style lang="scss">
-	@use 'src/styles/variables' as *;
-
 	button {
-		background-color: $gray-dark;
-		color: $gray-light;
+		background-color: var(--gray-dark);
+		color: var(--gray-light);
 		padding: 10px 20px;
-		border-radius: $border-radius;
+		border-radius: var(--border-radius);
 		border: none;
 		cursor: pointer;
 		&:active {
@@ -47,16 +45,16 @@
 	}
 	p {
 		span {
-			color: $primary-color;
+			color: var(--primary-color);
 			cursor: pointer;
 		}
 	}
 	@keyframes ripple {
 		0% {
-			background-color: #3f3f3f;
+			background-color: var(--gray-dark);
 		}
 		100% {
-			background-color: #2f2f2f;
+			background-color: var(--gray-darker);
 		}
 	}
 </style>

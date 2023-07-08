@@ -1,18 +1,18 @@
-@use 'variables';
-@use 'reset';
+@import './variables.scss';
+@import './reset.scss';
 
 :root {
-	background-color: variables.$background-color;
-	color: variables.$text-color;
-	font-family: variables.$font-family-sans;
+	background-color: var(--background-color);
+	color: var(--text-color);
+	font-family: var(--font-family-sans);
 	font-size: 16px;
 	line-height: 1.5;
 }
 
 @media (prefers-color-scheme: dark) {
 	:root {
-		background-color: variables.$gray-dark;
-		color: variables.$gray-light;
+		background-color: var(--background-color-dark);
+		color: var(--text-color-dark);
 	}
 }
 
@@ -23,13 +23,13 @@ h4,
 h5,
 h6,
 p {
-	font-family: variables.$font-family-sans;
-	font-weight: variables.$font-weight;
+	font-family: var(--font-family-sans);
+	font-weight: var(--font-weight);
 }
 
 h1 {
 	font-size: 2.5rem;
-	font-family: variables.$font-family-serif;
+	font-family: var(--font-family-serif);
 }
 
 h2 {
@@ -57,10 +57,10 @@ p {
 }
 
 a {
-	color: variables.$link-color;
+	color: var(--link-color);
 	text-decoration: none;
 	transition: color 0.5s;
 	&:hover {
-		color: variables.$link-color-hover;
+		color: var(--link-color-hover);
 	}
 }
