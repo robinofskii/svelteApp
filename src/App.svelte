@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, type ComponentType } from 'svelte';
 
 	import Home from './lib/pages/Home.svelte';
 	import Settings from './lib/pages/Settings.svelte';
@@ -11,7 +11,7 @@
 	type RouteType = {
 		title: string;
 		route: string;
-		component?: any;
+		component?: ComponentType;
 	};
 
 	export const ROUTES: RouteType[] = [
