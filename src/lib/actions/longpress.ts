@@ -1,6 +1,6 @@
 const longpress = (node: any, options: { duration: number }) => {
 	const { duration = 500 } = options;
-	let timer: number | undefined;
+	let timer: ReturnType<typeof setTimeout> | undefined;
 
 	const handleMousedown = () => {
 		timer = setTimeout(() => {
@@ -9,7 +9,7 @@ const longpress = (node: any, options: { duration: number }) => {
 	};
 
 	const handleMouseup = () => {
-		clearTimeout(timer);
+		clearTimeout(timer!);
 	};
 
 	node.addEventListener('mousedown', handleMousedown);
