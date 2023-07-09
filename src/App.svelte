@@ -4,24 +4,33 @@
 	import Home from './lib/pages/Home.svelte';
 	import Settings from './lib/pages/Settings.svelte';
 	import Location from './lib/pages/Location.svelte';
+	import Forms from './lib/pages/Forms.svelte';
 
 	import Head from './lib/Head.svelte';
+
+	type RouteType = {
+		title: string;
+		route: string;
+		component?: any;
+	};
+
+	export const ROUTES: RouteType[] = [
+		{ title: 'Home', route: '/', component: Home },
+		{ title: 'Forms', route: '/forms', component: Forms },
+		{ title: 'Location', route: '/location', component: Location },
+		{ title: 'Settings', route: '/settings', component: Settings },
+	];
 
 	let selectedPage = Home;
 
 	const onRouteChange = () => {
 		const route = window.location.hash.slice(1);
 
-		switch (route) {
-			case '/settings':
-				selectedPage = Settings;
-				break;
-			case '/location':
-				selectedPage = Location;
-				break;
-			default:
-				selectedPage = Home;
-		}
+		ROUTES.forEach((r) => {
+			if (r.route === route) {
+				selectedPage = r.component;
+			}
+		});
 	};
 
 	onMount(onRouteChange);
@@ -33,15 +42,11 @@
 
 <nav>
 	<ul>
-		<li>
-			<a href="#/">Home</a>
-		</li>
-		<li>
-			<a href="#/location">Location</a>
-		</li>
-		<li>
-			<a href="#/settings">Settings</a>
-		</li>
+		{#each ROUTES as route}
+			<li>
+				<a href={`#${route.route}`}>{route.title}</a>
+			</li>
+		{/each}
 	</ul>
 </nav>
 <div>
