@@ -1,7 +1,7 @@
 <script lang="ts">
 	import setInputType from '../actions/setInputType';
 	import { type User } from '../../models/User';
-	import { buildForm } from '../../helpers/formBuilder';
+	import { Form } from '../../helpers/formBuilder';
 	import {
 		validateAge,
 		validateEmail,
@@ -11,7 +11,7 @@
 
 	import Button from '../Button.svelte';
 
-	let formState = buildForm<User>({
+	let formState = new Form<User>({
 		username: {
 			label: 'Username',
 			placeholder: 'Enter your username',
@@ -39,16 +39,11 @@
 	});
 
 	$: {
-		formState.isValid = Object.values(formState.data).every((input) => input.isValid);
+		formState.runValidation();
 	}
 
-	const handleSubmit = () => {
-		formState.isSubmitting = true;
-
-		setTimeout(() => {
-			formState.isSubmitting = false;
-			console.table(formState.data);
-		}, 1000);
+	const handleSubmit = (e: Event) => {
+		formState.handleSubmitTest(e, 'api/user', 'POST');
 	};
 </script>
 
@@ -63,13 +58,11 @@
 				bind:value={value.value}
 				on:blur={() => {
 					value.isTouched = true;
-					value.isValid = value.validators.some((validator) => validator(value.value).isValid);
-					value.errorMessage = value.validators[0](value.value).errorMessage || null;
 				}}
 			/>
 			{#if value.isTouched}
 				{#if !value.isValid}
-					<p class="error">{value.validators[0](value.value).errorMessage}</p>
+					<p class="error">{value.errorMessage}</p>
 				{/if}
 			{/if}
 		</div>
