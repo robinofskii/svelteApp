@@ -1,12 +1,57 @@
-export type Validator = (value) => { isValid: boolean; errorMessage: string };
+import { EMAILREGEX, PASSWORDREGEX } from '../constants/REGEX';
 
-export const validateUsername: Validator = (username: string) => {
+type ValidatorOptions = {
+	[key: string]: any;
+};
+
+export type Validator = (
+	value: string | number,
+	options?: ValidatorOptions
+) => { isValid: boolean; errorMessage: string };
+
+export const validateRequired: Validator = <T>(value: T) => {
 	let isValid = true;
 	let errorMessage = '';
 
-	if (username.trim().length === 0) {
+	if (!value) {
 		isValid = false;
-		errorMessage = 'Username must not be empty';
+		errorMessage = 'Value must not be empty';
+	}
+
+	return {
+		isValid,
+		errorMessage,
+	};
+};
+
+export const validateMinMaxLength: Validator = (text: string, { min = 0, max = 0 }) => {
+	let isValid = true;
+	let errorMessage = '';
+
+	if (min > 0 && text.length < min) {
+		isValid = false;
+		errorMessage = `Value must be at least ${min} characters long`;
+	} else if (max > 0 && text.length > max) {
+		isValid = false;
+		errorMessage = `Value must be at most ${max} characters long`;
+	}
+
+	return {
+		isValid,
+		errorMessage,
+	};
+};
+
+export const validateMinMaxNumber = (n: number, { min = 0, max = 0 }) => {
+	let isValid = true;
+	let errorMessage = '';
+
+	if (min > 0 && n < min) {
+		isValid = false;
+		errorMessage = `Value must be at least ${min}`;
+	} else if (max > 0 && n > max) {
+		isValid = false;
+		errorMessage = `Value must be at most ${max}`;
 	}
 
 	return {
@@ -19,12 +64,9 @@ export const validateEmail: Validator = (email: string) => {
 	let isValid = true;
 	let errorMessage = '';
 
-	if (email.trim().length === 0) {
+	if (!EMAILREGEX.test(email)) {
 		isValid = false;
-		errorMessage = 'Email must not be empty';
-	} else if (!email.includes('@')) {
-		isValid = false;
-		errorMessage = 'Email must be valid';
+		errorMessage = 'Please enter a valid email address';
 	}
 
 	return {
@@ -37,27 +79,10 @@ export const validatePassword: Validator = (password: string) => {
 	let isValid = true;
 	let errorMessage = '';
 
-	if (password.trim().length === 0) {
+	if (!PASSWORDREGEX.test(password)) {
 		isValid = false;
-		errorMessage = 'Password must not be empty';
-	} else if (password.trim().length < 6) {
-		isValid = false;
-		errorMessage = 'Password must be at least 6 characters long';
-	}
-
-	return {
-		isValid,
-		errorMessage,
-	};
-};
-
-export const validateAge: Validator = (age: number) => {
-	let isValid = true;
-	let errorMessage = '';
-
-	if (age < 18) {
-		isValid = false;
-		errorMessage = 'You must be at least 18 years old';
+		errorMessage =
+			'Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number';
 	}
 
 	return {

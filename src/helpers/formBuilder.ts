@@ -1,6 +1,9 @@
 import type { Validator } from './validators';
 import type { InputType } from '../models/HtmlElement';
 
+/**
+ * Defines types and classes for building and validating forms.
+ */
 type FormConfig<T> = {
 	[K in keyof T]: {
 		label: string;
@@ -10,6 +13,9 @@ type FormConfig<T> = {
 	};
 };
 
+/**
+ * Defines the structure of a form field value.
+ */
 type FormValue<T> = {
 	label: string;
 	placeholder?: string;
@@ -21,10 +27,17 @@ type FormValue<T> = {
 	isTouched: boolean;
 };
 
+/**
+ * Defines the structure of a form builder object.
+ */
 type FormBuilder<T> = {
 	[K in keyof T]: FormValue<T[K]>;
 };
 
+/**
+ * Defines a Form class that handles building, validating, and submitting form data.
+ * @template T - The type of the form data.
+ */
 export class Form<T> {
 	data: FormBuilder<T>;
 	isSubmitting: boolean;
@@ -36,6 +49,11 @@ export class Form<T> {
 		this.isValid = false;
 	}
 
+	/**
+	 * Formats the form data from the given configuration object.
+	 * @param config - The configuration object containing the form data.
+	 * @returns The formatted form data.
+	 */
 	private formatDataFromConfig<T>(config: FormConfig<T>) {
 		const form: FormBuilder<T> = {} as FormBuilder<T>;
 

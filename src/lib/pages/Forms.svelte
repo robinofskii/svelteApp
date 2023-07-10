@@ -3,10 +3,10 @@
 	import { type User } from '../../models/User';
 	import { Form } from '../../helpers/formBuilder';
 	import {
-		validateAge,
+		validateMinMaxNumber,
 		validateEmail,
+		validateMinMaxLength,
 		validatePassword,
-		validateUsername,
 	} from '../../helpers/validators';
 
 	import Button from '../Button.svelte';
@@ -16,13 +16,13 @@
 			label: 'Username',
 			placeholder: 'Enter your username',
 			type: 'text',
-			validators: [validateUsername],
+			validators: [(v) => validateMinMaxLength(v, { min: 3 })],
 		},
 		age: {
 			label: 'Age',
 			placeholder: 'Enter your age',
 			type: 'number',
-			validators: [validateAge],
+			validators: [(v) => validateMinMaxNumber(v, { min: 18, max: 99 })],
 		},
 		email: {
 			label: 'Email',
@@ -72,10 +72,11 @@
 
 <style lang="scss">
 	form {
+		margin: 2rem auto;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		align-items: center;
+		max-width: 400px;
 
 		.inputGroup {
 			display: flex;
@@ -94,6 +95,7 @@
 				padding: 0.5rem;
 				border-radius: 0.5rem;
 				border: 1px solid #ccc;
+				width: 100%;
 
 				&:focus {
 					outline: none;
@@ -105,6 +107,8 @@
 				font-size: 0.75rem;
 				margin-top: 0.5rem;
 				color: var(--danger-color);
+				word-break: break-all;
+				white-space: normal;
 			}
 		}
 	}
