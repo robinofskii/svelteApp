@@ -75,10 +75,24 @@ export class Form<T> {
 	}
 
 	/**
+	 * Resets the form by setting all form values to their initial state.
+	 */
+	resetForm = () => {
+		Object.keys(this.data).forEach((key) => {
+			this.data[key].value = '' as T[keyof T];
+			this.data[key].isValid = false;
+			this.data[key].errorMessage = null;
+			this.data[key].isTouched = false;
+		});
+		this.isValid = false;
+		this.isSubmitting = false;
+	};
+
+	/**
 	 * Returns the form data as an object with keys corresponding to the form field names and values corresponding to the form field values.
 	 * @returns An object containing the form data.
 	 */
-	getData = () => {
+	getFormData = () => {
 		const data: FormBuilder<T> = {
 			...this.data,
 		};
@@ -89,6 +103,34 @@ export class Form<T> {
 			data[key] = this.data[key].value;
 		});
 		return data;
+	};
+
+	/**
+	 * Sets the form data to the given data object.
+	 * @param data - The data object to set the form data to.
+	 */
+	setFormData = (data: FormBuilder<T>) => {
+		Object.keys(data).forEach((key) => {
+			this.data[key].value = data[key];
+		});
+	};
+
+	/**
+	 * Returns the value of the form field with the given key.
+	 * @param key - The key of the form field to get the value of.
+	 * @returns The value of the form field.
+	 */
+	getInputValue = (key: keyof T) => {
+		return this.data[key].value;
+	};
+
+	/**
+	 * Sets the value of the form field with the given key to the given value.
+	 * @param key - The key of the form field to set the value of.
+	 * @param value - The value to set the form field to.
+	 */
+	setInputValue = (key: keyof T, value: T[keyof T]) => {
+		this.data[key].value = value;
 	};
 
 	/**
@@ -130,7 +172,7 @@ export class Form<T> {
 	handleSubmitToEndpoint = (event: Event, endpoint: string, method: 'POST' | 'PUT' | 'PATCH') => {
 		event.preventDefault();
 		this.isSubmitting = true;
-		const data = this.getData();
+		const data = this.getFormData();
 		fetch(endpoint, {
 			method,
 			headers: {
@@ -149,7 +191,7 @@ export class Form<T> {
 				this.isSubmitting = false;
 			});
 
-		return this.getData();
+		return this.getFormData();
 	};
 
 	/**
@@ -164,7 +206,7 @@ export class Form<T> {
 		event.preventDefault();
 		this.isSubmitting = true;
 		const data = {
-			data: this.getData(),
+			data: this.getFormData(),
 			endpoint,
 			method,
 		};
@@ -184,6 +226,6 @@ export class Form<T> {
 				this.isSubmitting = false;
 			});
 
-		return this.getData();
+		return this.getFormData();
 	};
 }
